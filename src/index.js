@@ -2,7 +2,7 @@
 require("dotenv").config();
 const fs = require("node:fs");
 const path = require("node:path");
-const { Client, Collection, GatewayIntentBits } = require("discord.js");
+const { Client, Collection, GatewayIntentBits, ActivityType } = require("discord.js");
 
 const token = process.env.BOT_TOKEN;
 
@@ -22,7 +22,9 @@ for (const file of commandFiles) {
 
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
-    console.log("Ready!");
+    console.log("Up and Running!");
+    client.user.setActivity("manga unboxings", { type: ActivityType.Watching });
+    client.user.setStatus('dnd');
 });
 
 client.on("interactionCreate", async (interaction) => {
