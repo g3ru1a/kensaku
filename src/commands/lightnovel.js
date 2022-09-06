@@ -3,6 +3,7 @@ const logger = require("../logger");
 const { SlashCommandBuilder } = require("discord.js");
 const LNEmbed = require("../embeds/lightnovel");
 
+const mu_series_search_url = "https://api.mangaupdates.com/v1/series/search";
 const query = `
 query ($search_query: String) { 
   Media (search: $search_query, type: MANGA, format: NOVEL, isAdult: false) {
@@ -69,7 +70,16 @@ module.exports = {
             search_query,
         });
 
-        fetch(url, opt).then(handleResponse).then(handleData).catch(handleError);
+        let m_Data = null;
+
+        await fetch(url, opt).then(handleResponse).then(handleData).catch(handleError);
+
+        if(m_Data){
+            let mu_url = await fetchMangaUpdatesData(m_Data.data.Media);
+            m_Data.data.Media.mu_url = mu_url;
+            let embed = LNEmbed.build(m_Data.data.Media, detailed);
+            await interaction.reply({ embeds: [embed] });
+        }
 
         function handleResponse(response) {
             return response.json().then(function (json) {
@@ -79,8 +89,7 @@ module.exports = {
 
         async function handleData(data) {
             console.log(`[LN] ✔️ '${search_query}' Sucess.`);
-            let embed = LNEmbed.build(data.data.Media, detailed);
-            await interaction.reply({ embeds: [embed] });
+            m_Data = data;
         }
 
         async function handleError(error) {
@@ -93,5 +102,30 @@ module.exports = {
             console.log(`[LN] ❌ '${search_query}'. Check Logs.`);
             await interaction.reply("Something went wrong, check console.");
         }
+
+        async function fetchMangaUpdatesData(data) {
+            let response = null;
+            
+            await fetch(mu_series_search_url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    search: data.title.romaji,
+                    stype: "title",
+                    type: ["Novel"]
+                }),
+            })
+                .then(handleResponse)
+                .then((res) => (response = res));
+
+            if(response.total_hits > 0){
+                let res = response.results[0];
+                return res.record.url;
+            }
+            return null;
+        };
     },
 };

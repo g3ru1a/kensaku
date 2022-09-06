@@ -18,6 +18,7 @@ module.exports = {
         let al_link = `https://anilist.co/manga/${data.id}`;
         let mal_link = `https://myanimelist.net/manga/${data.idMal}`;
         let links = `[AL](${al_link}), [MAL](${mal_link})`;
+        if (data.mu_url) links += `, [MU](${data.mu_url})`;
         let author = data.staff.edges.find((s) => s.role.toLowerCase().includes("story"));
         let embed = new EmbedBuilder()
             .setColor(colors[data.status])
@@ -32,7 +33,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: "<manga> ]ln[ {anime}" });
         if(data.status == "RELEASING" || data.status == "HIATUS"){
-            embed.addFields({ name: "\u200B", value: "\u200B", inline: true });
+            // embed.addFields({ name: "\u200B", value: "\u200B", inline: true });
             embed.addFields(
                 {
                     name: "\u200b",
