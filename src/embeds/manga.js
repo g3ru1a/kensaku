@@ -18,6 +18,7 @@ module.exports = {
         let al_link = `https://anilist.co/manga/${data.id}`;
         let mal_link = `https://myanimelist.net/manga/${data.idMal}`;
         let links = `[AL](${al_link}), [MAL](${mal_link})`;
+        if(data.mu_url) links += `, [MU](${data.mu_url})`;
         let author = data.staff.edges.find((s) => s.role.toLowerCase().includes("story"));
         let format = data.format.replace("_", " ");
         format = format.charAt(0).toUpperCase() + format.slice(1).toLowerCase();
