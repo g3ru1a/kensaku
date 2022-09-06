@@ -1,0 +1,28 @@
+{
+  "name": "kensaku",
+  "version": "1.0.0",
+  "description": "Manga & Anime Lookup Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "commands": "node src/deploy-commands.js",
+    "build": "npm run commands && npm run start"
+  },
+  "keywords": [
+    "discord-bot",
+    "anime",
+    "manga"
+  ],
+  "author": "G3ru1a",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/rest": "^1.1.0",
+    "axios": "^0.27.2",
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.2",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.0"
+  }
+}
