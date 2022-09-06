@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const logger = require('../logger');
 const { SlashCommandBuilder } = require("discord.js");
 const AnimeEmbed = require("../embeds/anime");
 
@@ -66,17 +67,19 @@ module.exports = {
         }
 
         async function handleData(data) {
-            console.log(JSON.stringify(data));
+            console.log(`[A] ✔️ '${search_query}' Sucess.`);
             let embed = AnimeEmbed.build(data.data.Media, detailed);
             await interaction.reply({ embeds: [embed] });
         }
 
         async function handleError(error) {
-            console.error(error);
             if (error.errors[0].status == 404) {
+                console.log(`[A] ❗ '${search_query}' Not Found.`);
                 await interaction.reply("Couldn't find any anime.");
                 return;
             }
+            logger.error(error, `Error while looking for '${search_query}' Anime. HTTP Response:`);
+            console.log(`[A] ❌ '${search_query}'. Check Logs.`);
             await interaction.reply("Something went wrong, check console.");
         }
     },

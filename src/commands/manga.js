@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const logger = require("../logger");
 const { SlashCommandBuilder } = require("discord.js");
 const MangaEmbed = require("../embeds/manga");
 
@@ -74,17 +75,19 @@ module.exports = {
         }
 
         async function handleData(data) {
-            console.log(JSON.stringify(data));
+            console.log(`[M] ✔️ '${search_query}' Sucess.`);
             let embed = MangaEmbed.build(data.data.Media, detailed);
             await interaction.reply({ embeds: [embed] });
         }
 
         async function handleError(error) {
-            console.error(error);
             if (error.errors[0].status == 404) {
+                console.log(`[M] ❗  '${search_query}' Not Found.`);
                 await interaction.reply("Couldn't find any manga.");
                 return;
             }
+            logger.error(error, `Error while looking for '${search_query}' Manga. HTTP Response:`);
+            console.log(`[M] ❌  '${search_query}'. Check Logs.`);
             await interaction.reply("Something went wrong, check console.");
         }
     },
