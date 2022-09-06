@@ -58,13 +58,13 @@ module.exports = {
         .addStringOption((option) => option.setName("name").setDescription("Terms to lookup").setRequired(true))
         .addBooleanOption((option) => option.setName("detailed").setDescription("Show Full Info")),
     async execute(interaction) {
-        this.fetcLightNovel(
+        this.fetchLightNovel(
             interaction,
             interaction.options.getString("name"),
             interaction.options.getBoolean("detailed")
         );
     },
-    async fetcLightNovel(interaction, search_query, detailed = false) {
+    async fetchLightNovel(interaction, search_query, detailed = false) {
         let opt = options({
             search_query,
         });
