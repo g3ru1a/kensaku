@@ -5,7 +5,7 @@ const MangaEmbed = require("../embeds/manga");
 
 const query = `
 query ($search_query: String) { 
-  Media (search: $search_query, type: MANGA, sort: POPULARITY_DESC, isAdult: False) {
+  Media (search: $search_query, type: MANGA, sort: POPULARITY_DESC, isAdult: false) {
     id,
     idMal,
     title {
