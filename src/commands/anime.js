@@ -5,7 +5,7 @@ const AnimeEmbed = require("../embeds/anime");
 
 const query = `
 query ($search_query: String) { 
-  Media (search: $search_query, type: ANIME) {
+  Media (search: $search_query, type: ANIME, isAdult: False) {
     id,
     idMal,
     title {

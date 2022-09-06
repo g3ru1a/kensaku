@@ -5,7 +5,7 @@ const LNEmbed = require("../embeds/lightnovel");
 
 const query = `
 query ($search_query: String) { 
-  Media (search: $search_query, type: MANGA, format: NOVEL) {
+  Media (search: $search_query, type: MANGA, format: NOVEL, isAdult: False) {
     id,
     idMal,
     title {
