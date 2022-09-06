@@ -26,13 +26,16 @@ module.exports = {
             .setTitle(title)
             .setThumbnail(data.coverImage.extraLarge)
             .addFields(
-                { name: "English", value: title_en, inline: true },
-                { name: "Native", value: title_nat, inline: true }
+                {
+                    name: "\u200b",
+                    value: `**English:** ${title_en} | **Native:** ${title_nat}`,
+                }
             )
-            .addFields({ name: "Genres", value: genres })
             .addFields(
-                { name: "Status", value: status, inline: true },
-                { name: "Episodes", value: `${data.episodes}`, inline: true },
+                {
+                    name: "\u200b",
+                    value: `**Genres:** ${genres} | **Status:** ${status} | **Episodes:** ${data.episodes}`,
+                },
             )
             .setTimestamp()
             .setFooter({ text: "<manga> ]ln[ {anime}" });

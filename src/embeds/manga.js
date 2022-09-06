@@ -27,23 +27,23 @@ module.exports = {
             .setTitle(title)
             .setThumbnail(data.coverImage.extraLarge)
             .addFields(
-                { name: "English", value: title_en, inline: true },
-                { name: "Native", value: title_nat, inline: true },
-                { name: "Format", value: `${format}`, inline: true}
+                { name: '\u200b', value: `**English:** ${title_en} | **Native:** ${title_nat} | **Format:** ${format}`},
             )
             .setTimestamp()
             .setFooter({ text: "<manga> ]ln[ {anime}" });
         if(data.status == "RELEASING" || data.status == "HIATUS"){
             embed.addFields(
-                { name: "Genres", value: genres, inline: true },
-                { name: "Status", value: status, inline: true }
+                {
+                    name: "\u200b",
+                    value: `**Genres:** ${genres} | **Status:** ${status}`,
+                },
             );
         }else {
-            embed.addFields({ name: "Genres", value: genres });
             embed.addFields(
-                { name: "Status", value: status, inline: true },
-                { name: "Chapters", value: `${data.chapters}`, inline: true },
-                { name: "Volumes", value: `${data.volumes}`, inline: true }
+                {
+                    name: "\u200b",
+                    value: `**Genres:** ${genres} | **Status:** ${status} | **Chapters:** ${data.chapters} | **Volumes:** ${data.volumes}`,
+                },
             );
         }
         if(detailed) {
