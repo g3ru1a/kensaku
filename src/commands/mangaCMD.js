@@ -68,41 +68,46 @@ export default {
         let data = {...mu};
         if(al) {
             al = al.value;
-            let keys = Object.keys(data)
-                .filter(key => data[key] == "" || data[key] == undefined || data[key] == null);
-            keys.forEach(key => {
-                if(al[key]) data[key] = al[key];
-            });
-            if(al.status && al.status.length < data.status.length) data.status = al.status.toUpperCase();
-            if (al.author && al.author.length > data.author.length) data.author = al.author;
-            if(data.title.romaji == null && al.title?.romaji){
-                data.title.romaji = al.title.romaji;
-            }
-            if (data.title.native == null && al.title?.native) {
-                data.title.native = al.title.native;
-            }
-            if (data.title.english == null && al.title?.english) {
-                data.title.english = al.title.english;
+            if(al){
+                let keys = Object.keys(data).filter(
+                    (key) => data[key] == "" || data[key] == undefined || data[key] == null
+                );
+                keys.forEach((key) => {
+                    if (al[key]) data[key] = al[key];
+                });
+                if (al.status && al.status.length < data.status.length) data.status = al.status.toUpperCase();
+                if (al.author && al.author.length > data.author.length) data.author = al.author;
+                if (data.title.romaji == null && al.title?.romaji) {
+                    data.title.romaji = al.title.romaji;
+                }
+                if (data.title.native == null && al.title?.native) {
+                    data.title.native = al.title.native;
+                }
+                if (data.title.english == null && al.title?.english) {
+                    data.title.english = al.title.english;
+                }
             }
         }
         if(md) {
             md = md.value;
-            let keys = Object.keys(data).filter(
-                (key) => data[key] == "" || data[key] == undefined || data[key] == null
-            );
-            keys.forEach((key) => {
-                if (md[key]) data[key] = md[key];
-            });
-            if (md.status && md.status.length < data.status.length) data.status = md.status.toUpperCase();
-            if (md.author && md.author.length > data.author.length) data.author = md.author;
-            if (data.title.romaji == null && md.title?.romaji) {
-                data.title.romaji = md.title.romaji;
-            }
-            if (data.title.native == null && md.title?.native) {
-                data.title.native = md.title.native;
-            }
-            if (data.title.english == null && md.title?.english) {
-                data.title.english = md.title.english;
+            if(md) {
+                let keys = Object.keys(data).filter(
+                    (key) => data[key] == "" || data[key] == undefined || data[key] == null
+                );
+                keys.forEach((key) => {
+                    if (md[key]) data[key] = md[key];
+                });
+                if (md.status && md.status.length < data.status.length) data.status = md.status.toUpperCase();
+                if (md.author && md.author.length > data.author.length) data.author = md.author;
+                if (data.title.romaji == null && md.title?.romaji) {
+                    data.title.romaji = md.title.romaji;
+                }
+                if (data.title.native == null && md.title?.native) {
+                    data.title.native = md.title.native;
+                }
+                if (data.title.english == null && md.title?.english) {
+                    data.title.english = md.title.english;
+                }
             }
         }
         let embed = MangaEmbed.build(data, detailed);
