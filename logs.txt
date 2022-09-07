@@ -38,3 +38,31 @@ Error while searching AniList for 'Gintama dj - Anti Blessing Liar Angel'. HTTP 
  "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
 
 
+Error while searching AniList for 'dick island'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching AniList for 'Dick Cloud'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching MangaUpdates for 'naruto'. HTTP Response:
+ "{"status":"exception","reason":"This action requires a user account"}"
+
+
+Error while searching MangaUpdates for 'solo leveling'. HTTP Response:
+ "{"status":"exception","reason":"This action requires a user account"}"
+
+
+Error while searching AniList for 'Wotaku ni Koi wa Muzukashii'. HTTP Response:
+ "{"errors":[{"message":"Field \"Media\" argument \"type\" requires type MediaType, found MANGAfalse; Did you mean the enum value MANGA?","status":400,"locations":[{"line":3,"column":41}]}],"data":null}"
+
+
+Error while searching AniList for 'Wotaku ni Koi wa Muzukashii'. HTTP Response:
+ "{"errors":[{"message":"Field \"Media\" argument \"type\" requires type MediaType, found MANGAfalse; Did you mean the enum value MANGA?","status":400,"locations":[{"line":3,"column":41}]}],"data":null}"
+
+
+Error while searching AniList for 'Wotaku ni Koi wa Muzukashii'. HTTP Response:
+ "{"errors":[{"message":"Field \"Media\" argument \"type\" requires type MediaType, found MANGAfalse; Did you mean the enum value MANGA?","status":400,"locations":[{"line":3,"column":41}]}],"data":null}"
+
+

@@ -19,11 +19,13 @@ class AnilistAPI {
     query = ``;
     url = "https://graphql.anilist.co";
 
-    constructor(type, sort = "POPULARITY_DESC", isAdult = false, format = "") {
+    constructor(type, sort = "", isAdult = false, format = "") {
+        if (sort != "") sort = `, sort: ${sort}`;
         if (format != "") format = `, format: ${format}`;
+        let adult = `, isAdult: ${isAdult}`;
         this.query = `
 			query ($search_query: String) { 
-				Media (search: $search_query, type: ${type}, sort: ${sort}, isAdult: ${isAdult}${format}) {
+				Media (search: $search_query, type: ${type}${sort}${adult}${format}) {
 					id,
 					idMal,
 					title {
@@ -104,8 +106,30 @@ class AnilistAPI {
                 console.log(`[AniList Search] ❌  '${search_query}'. Check Logs.`);
             });
         if(returnData == null) return null;
+        return AnilistAPI.parseToMedia(returnData.data.Media);
+    }
+
+    static parseToMedia(data){
         let media = new Media();
-        media.loadFromALData(returnData.data.Media);
+        media.al_url = `https://anilist.co/manga/${data.id}`;
+        media.mal_url = `https://myanimelist.net/manga/${data.idMal}`;
+        media.title = { ...data.title };
+        media.description = data.description?.replace(/<\/?[^>]+(>|$)/g, "");
+        media.status = data.status;
+        media.chapters = data.chapters;
+        media.volumes = data.volumes;
+        media.genres = data.genres?.join(", ");
+        media.format = data.format;
+        media.episodes = data.episodes;
+        media.image_url = data.coverImage?.extraLarge;
+
+        let a = data.staff?.edges?.find((s) => s.role?.toLowerCase().includes("story"));
+        if (a) media.author = a.node?.name?.full;
+
+        media.nextEpisode = {
+            timeUntil: data.nextAiringEpisode?.timeUntilAiring,
+            episode: data.nextAiringEpisode?.episode,
+        };
         return media;
     }
 }

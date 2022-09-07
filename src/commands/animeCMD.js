@@ -11,9 +11,9 @@ export default {
         .addStringOption((option) => option.setName("name").setDescription("Terms to lookup").setRequired(true))
         .addBooleanOption((option) => option.setName("detailed").setDescription("Show Full Info")),
     async execute(interaction) {
-        this.fetchAnime(interaction, interaction.options.getString("name"), interaction.options.getBoolean("detailed"));
+        this.fetchAnime(interaction, interaction.options.getString("name"), interaction.options.getBoolean("detailed"), true);
     },
-    async fetchAnime(interaction, search_query, detailed = false) {
+    async fetchAnime(interaction, search_query, detailed = false, cmd = false) {
         let data = await ALApi.search(search_query);
         
         if (!data) {
@@ -22,6 +22,7 @@ export default {
         }
 
         let embed = AnimeEmbed.build(data, detailed);
-        await interaction.reply({ embeds: [embed] });
+        if (cmd) await interaction.reply({ embeds: [embed] });
+        else await interaction.channel.send({ embeds: [embed] });
     },
 };

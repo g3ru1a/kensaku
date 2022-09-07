@@ -17,12 +17,16 @@ export default {
         this.fetchLightNovel(
             interaction,
             interaction.options.getString("name"),
-            interaction.options.getBoolean("detailed")
+            interaction.options.getBoolean("detailed"),
+            true
         );
     },
-    async fetchLightNovel(interaction, search_query, detailed = false) {
+    async fetchLightNovel(interaction, search_query, detailed = false, cmd = false) {
         let data = await ALApi.search(search_query);
-        let mu_url = await MUApi.findUrlByTitle(data.title.romaji, { type: ["Novel"] });
+        let results = await MUApi.search(data.title.romaji, { type: ["Novel"] });
+        let mu_url = null;
+        if (results) mu_url = await MUApi.getSeries(results[0].id);
+        if (mu_url) mu_url = mu_url.mu_url;
 
         if (!data) {
             interaction.reply("Could not find anything.");
@@ -31,6 +35,7 @@ export default {
 
         data.mu_url = mu_url;
         let embed = LNEmbed.build(data, detailed);
-        await interaction.reply({ embeds: [embed] });
+        if (cmd) await interaction.reply({ embeds: [embed] });
+        else await interaction.channel.send({ embeds: [embed] });
     },
 };

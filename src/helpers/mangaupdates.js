@@ -1,60 +1,22 @@
 import fetch from "node-fetch";
 import logger from "../logger.js";
+import API from "./api.js";
 import Media from "./media.js";
 
-class MangaUpdatesAPI {
-    url = "https://api.mangaupdates.com/v1/series/search";
-    url_get = "https://api.mangaupdates.com/v1/series/";
-
-    options(vars, method = "POST") {
-        let opts = {
-            method: method,
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            }
-        };
-        if(vars){
-            opts = {
-                ...opts,
-                body: JSON.stringify(vars),
-            };
-        }
-        return opts;
-    }
-
-    async findUrlByTitle(search_query, opts) {
-        let link;
-        let opt = this.options({
-            search: search_query,
-            stype: "title",
-            ...opts,
-        });
-        await fetch(this.url, opt)
-            .then(MangaUpdatesAPI.handleResponse)
-            .then((data) => {
-                if (data.total_hits > 0) {
-                    let res = data.results[0];
-                    link = res.record.url;
-                    console.log(`[MangaUpdates Search] ✔️ '${search_query}' Sucess.`);
-                } else console.log(`[MangaUpdates Search] ❗  '${search_query}' Not Found.`);
-            })
-            .catch((error) => {
-                logger.error(error, `Error while searching MangaUpdates for '${search_query}'. HTTP Response:`);
-                console.log(`[MangaUpdates Search] ❌  '${search_query}'. Check Logs.`);
-            });
-        return link;
-    }
+class MangaUpdatesAPI extends API {
+    url = "https://api.mangaupdates.com/v1/series/";
 
     async search(search_query, opts) {
         let data = null;
-        let opt = this.options({
+        let opt = this.constructor.options({
             search: search_query,
             stype: "title",
+            type: ["Manga", "Manhua", "Manhwa", "French"],
             ...opts,
         });
-        await fetch(this.url, opt)
-            .then(MangaUpdatesAPI.handleResponse)
+
+        await fetch(this.url + "search", opt)
+            .then(this.constructor.handleResponse)
             .then((d) => {
                 if (d.total_hits > 0) {
                     data = d;
@@ -66,36 +28,38 @@ class MangaUpdatesAPI {
                 console.log(`[MangaUpdates Search] ❌  '${search_query}'. Check Logs.`);
             });
         if (data == null) return null;
-
-        if(data.total_hits == 1){
-            let res = data.results[0];
-            let media = new Media();
-            let series = await this.getSeries(res.record.series_id);
-            await media.loadFromMUResult(series);
-            return media;
-        }
-        
         let results = [];
-        data.results.forEach((res) => {
-            results.push({name: res.record.title, id: res.record.series_id});
+        data.results.slice(0, Math.min(data.results.length, 5)).forEach((res) => {
+            results.push({ name: res.record.title, id: res.record.series_id });
         });
         return results;
     }
 
     async getSeries(series_id) {
-        let series = null;
-        await fetch(this.url_get+series_id, this.options(null, "GET")).then(MangaUpdatesAPI.handleResponse)
-        .then(data => {
-            series = data;
-        })
-        .catch(error => console.log(error));
-        return series;
+        let data = null;
+        let opts = this.constructor.options(null, "GET");
+        await fetch(this.url + series_id, opts)
+            .then(this.constructor.handleResponse)
+            .then((d) => {
+                data = d;
+            })
+            .catch((error) => console.log(error));
+        return this.constructor.parseToMedia(data);
     }
 
-    static handleResponse(response) {
-        return response.json().then(function (json) {
-            return response.ok ? json : Promise.reject(json);
-        });
+    static parseToMedia(data) {
+        let media = new Media();
+        media.mu_url = data.url;
+        media.title.romaji = data.title;
+        media.description = data.description?.replace(/<\/?[^>]+(>|$)/g, "");
+        media.status = data.status;
+        media.chapters = data.latest_chapter;
+        media.volumes = null;
+        media.genres = data.genres.map(g => g.genre).join(", ");
+        media.format = data.type;
+        media.image_url = data.image.url.original;
+        media.author = data.authors.filter(a => a.type == "Author").map(a => a.name).join(" & ");
+        return media;
     }
 }
 
