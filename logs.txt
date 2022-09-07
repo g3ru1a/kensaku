@@ -1,0 +1,20 @@
+Error while searching AniList for 'wotakoi'. HTTP Response:
+ "{"errors":[{"message":"Field \"Media\" argument \"isAdult\" requires type Boolean, found falseundefined.","status":400,"locations":[{"line":3,"column":80}]}],"data":null}"
+
+
+Error while searching AniList for 'wotakoi'. HTTP Response:
+ "{}"
+
+
+Error while searching AniList for 'wotakoi'. HTTP Response:
+ "{}"
+
+
+Error while searching MangaUpdates for 'wotakoi'. HTTP Response:
+ "{}"
+
+
+Error while searching MangaUpdates for 'wotakoi'. HTTP Response:
+ "{}"
+
+

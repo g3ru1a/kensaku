@@ -6,13 +6,16 @@
   "scripts": {
     "start": "node src/index.js",
     "commands": "node src/deploy-commands.js",
-    "build": "npm run commands && npm run start"
+    "build": "npm run commands && npm run start",
+    "dev-cmd": "nodemon src/deploy-commands.js",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "discord-bot",
     "anime",
     "manga"
   ],
+  "type": "module",
   "author": "G3ru1a",
   "license": "MIT",
   "dependencies": {
@@ -23,6 +26,7 @@
     "node-fetch": "^2.6.7"
   },
   "devDependencies": {
-    "eslint": "^8.23.0"
+    "eslint": "^8.23.0",
+    "nodemon": "^2.0.19"
   }
 }

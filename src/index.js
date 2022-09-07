@@ -1,24 +1,15 @@
-// Require the necessary discord.js classes
-require("dotenv").config();
-const fs = require("node:fs");
-const path = require("node:path");
-const { Client, Collection, GatewayIntentBits, ActivityType } = require("discord.js");
+import dotenv from "dotenv";
+import { Client, GatewayIntentBits, ActivityType } from "discord.js";
+import CH from "./helpers/commands.js";
+//Load .env
+dotenv.config();
 
 const token = process.env.BOT_TOKEN;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-client.commands = new Collection();
-const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
-	client.commands.set(command.data.name, command);
-}
+client.commands = await CH.loadCommandCollectionFrom("commands");
 
 // When the client is ready, run this code (only once)
 client.once("ready", () => {

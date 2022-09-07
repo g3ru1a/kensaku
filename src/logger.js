@@ -1,12 +1,9 @@
-const fs = require("fs");
-const path = require("node:path");
+import fs from "fs";
 
-const content = "Some content!";
-
-const logPath = path.join(__dirname, "logs.txt");
+const logPath = "./logs.txt";
 
 
-module.exports = {
+export default {
     error(error, firstLine){
         let content = firstLine + '\n "' + JSON.stringify(error) + '"\n\n\n';
         fs.writeFile(logPath, content, { flag: "a+" }, (err) => {
