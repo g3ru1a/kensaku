@@ -89,7 +89,8 @@ class Media {
             titles.romaji = mu.title;
         }
         if (titles.english == null && md) {
-            titles.english = md.attributes.altTitles.find(a => a.en != undefined).en;
+            let title = md.attributes.altTitles.find(a => a.en != undefined);
+            titles.english = title ? title.en : null;
         }
         if (titles.native == null && md) {
             let titleObj = md.attributes.altTitles[0];
