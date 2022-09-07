@@ -49,8 +49,6 @@ export default {
         let series = await MUApi.getSeries(series_id);
         await data.loadFromMUResult(series);
 
-        console.log(data);
-
         let embed = MangaEmbed.build(data, detailed);
         await interaction.channel.send({ embeds: [embed] });
     }
