@@ -71,8 +71,8 @@ class Media {
 
     computeDescription(mu, al, md) {
         if(mu.description) return mu.description.replace(/<\/?[^>]+(>|$)/g, "");
-        else if(al.description) return al.description;
-        else if(md.attributes.description?.en)
+        else if(al && al.description) return al.description;
+        else if(md && md.attributes.description?.en)
             return md.attributes.description.en.replace(/<\/?[^>]+(>|$)/g, "");
         else return "";
     }
