@@ -17,6 +17,7 @@ export default {
         this.fetchManga(interaction, interaction.options.getString("name"), interaction.options.getBoolean("detailed"));
     },
     async fetchManga(interaction, search_query, detailed = false) {
+        interaction.channel.sendTyping();
         let data = await ALApi.search(search_query);
         let mu_url = await MUApi.findUrlByTitle(search_query);
 
@@ -27,6 +28,7 @@ export default {
         await interaction.channel.send({ embeds: [embed] });
     },
     async fetchMangaExperimental(interaction, search_query, detailed = false) {
+        interaction.channel.sendTyping();
         let data = await MUApi.search(search_query);
 
         // Not found
