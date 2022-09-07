@@ -1,16 +1,25 @@
 import MediaEmbed from "./mediaEmbed.js";
 
 export default {
+    /**
+     *
+     * @param {Media} data
+     * @param {boolean} detailed
+     * @returns EmbedBuilder
+     */
     build: function (data, detailed = false) {
         let status = data.status.charAt(0).toUpperCase() + data.status.slice(1).toLowerCase();
         let links = MediaEmbed.getLinks(data);
 
         let embed = MediaEmbed.get(data);
 
-        if(data.status == "RELEASING" || data.status == "HIATUS"){
-            embed.addFields({name: "\u200b",value: `**Genres:** ${data.genres} | **Status:** ${status}`});
-        }else {
-            embed.addFields({name: "\u200b",value: `**Genres:** ${data.genres} | **Status:** ${status} | **Chapters:** ${data.chapters} | **Volumes:** ${data.volumes}`});
+        if (data.status == "RELEASING" || data.status == "HIATUS") {
+            embed.addFields({ name: "\u200b", value: `**Genres:** ${data.genres} | **Status:** ${status}` });
+        } else {
+            embed.addFields({
+                name: "\u200b",
+                value: `**Genres:** ${data.genres} | **Status:** ${status} | **Chapters:** ${data.chapters} | **Volumes:** ${data.volumes}`,
+            });
         }
 
         let desc = links;

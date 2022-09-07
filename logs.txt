@@ -18,3 +18,23 @@ Error while searching MangaUpdates for 'wotakoi'. HTTP Response:
  "{}"
 
 
+Error while searching AniList for 'Solo Leveling (Novel)'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching AniList for 'Kono Subarashii Sekai ni Shukufuku o! Yorimichi! (Novel)'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching AniList for 'Kono Subarashii Sekai ni Shukufuku o! Yorimichi! (Novel)'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching AniList for 'Kono Subarashii Sekai ni Shukufuku o! Yorimichi! (Novel)'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching AniList for 'Gintama dj - Anti Blessing Liar Angel'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+

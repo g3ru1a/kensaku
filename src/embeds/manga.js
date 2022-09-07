@@ -1,6 +1,12 @@
 import MediaEmbed from "./mediaEmbed.js";
 
 export default {
+    /**
+     *
+     * @param {Media} data
+     * @param {boolean} detailed
+     * @returns EmbedBuilder
+     */
     build: function (data, detailed = false) {
         let status = data.status.charAt(0).toUpperCase() + data.status.slice(1).toLowerCase();
         let links = MediaEmbed.getLinks(data);

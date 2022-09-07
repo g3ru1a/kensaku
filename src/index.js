@@ -33,6 +33,19 @@ client.on("interactionCreate", async (interaction) => {
     }
 });
 
+client.on("interactionCreate", async (interaction) => {
+    if (!interaction.isSelectMenu()) return;
+
+    if (interaction.customId === "select_manga") {
+        let selection = JSON.parse(interaction.values[0]);
+        console.log(selection);
+        if(interaction.member.id != selection[2]) return;
+        await interaction.update({ content: `Fetching...`, components: [] });
+        let mangaCMD = interaction.client.commands.get('km');
+        mangaCMD.loadManga(interaction, selection[0], selection[1]);
+    }
+});
+
 client.on("messageCreate", async(message) => {
     if (message.author.bot) return;
     

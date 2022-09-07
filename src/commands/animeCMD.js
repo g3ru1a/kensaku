@@ -16,7 +16,10 @@ export default {
     async fetchAnime(interaction, search_query, detailed = false) {
         let data = await ALApi.search(search_query);
         
-        if (!data) interaction.reply("Could not find anything.");
+        if (!data) {
+            interaction.reply("Could not find anything.");
+            return;
+        }
 
         let embed = AnimeEmbed.build(data, detailed);
         await interaction.reply({ embeds: [embed] });

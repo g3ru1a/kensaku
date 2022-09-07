@@ -24,7 +24,10 @@ export default {
         let data = await ALApi.search(search_query);
         let mu_url = await MUApi.findUrlByTitle(data.title.romaji, { type: ["Novel"] });
 
-        if(!data) interaction.reply("Could not find anything.");
+        if (!data) {
+            interaction.reply("Could not find anything.");
+            return;
+        }
 
         data.mu_url = mu_url;
         let embed = LNEmbed.build(data, detailed);

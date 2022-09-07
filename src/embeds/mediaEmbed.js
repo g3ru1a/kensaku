@@ -16,8 +16,10 @@ export default {
         let format = data.format.replace("_", " ");
         if(format != "OVA") format = format.charAt(0).toUpperCase() + format.slice(1).toLowerCase();
 
+        let c = colors[data.status] != undefined ? colors[data.status] : "#141414";
+
         let embed = new EmbedBuilder()
-            .setColor(colors[data.status])
+            .setColor(c)
             .setTitle(title)
             .setThumbnail(data.image_url)
             .addFields(
