@@ -21,7 +21,10 @@ export default {
         let data = await ALApi.search(search_query);
         let mu_url = await MUApi.findUrlByTitle(search_query);
 
-        if (!data) interaction.reply("Could not find anything.");
+        if (!data) {
+            interaction.reply("Could not find anything.");
+            return;
+        }
 
         data.mu_url = mu_url;
         let embed = MangaEmbed.build(data, detailed);
