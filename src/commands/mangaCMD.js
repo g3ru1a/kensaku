@@ -24,7 +24,7 @@ export default {
 
         data.mu_url = mu_url;
         let embed = MangaEmbed.build(data, detailed);
-        await interaction.reply({ embeds: [embed] });
+        await interaction.channel.send({ embeds: [embed] });
     },
     async fetchMangaExperimental(interaction, search_query, detailed = false) {
         let data = await MUApi.search(search_query);
