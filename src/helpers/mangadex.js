@@ -29,12 +29,12 @@ class MangaDexAPI {
             .then((d) => {
                 if (d.total > 0) {
                     data = d.data[0];
-                    console.log(`[MangaUpdates Search] ✔️ '${search_query}' Sucess.`);
-                } else console.log(`[MangaUpdates Search] ❗  '${search_query}' Not Found.`);
+                    console.log(`[MangaDex Search] ✔️ '${search_query}' Sucess.`);
+                } else console.log(`[MangaDex Search] ❗  '${search_query}' Not Found.`);
             })
             .catch((error) => {
-                logger.error(error, `Error while searching MangaUpdates for '${search_query}'. HTTP Response:`);
-                console.log(`[MangaUpdates Search] ❌  '${search_query}'. Check Logs.`);
+                logger.error(error, `Error while searching MangaDex for '${search_query}'. HTTP Response:`);
+                console.log(`[MangaDex Search] ❌  '${search_query}'. Check Logs.`);
             });
         return data;
     }
