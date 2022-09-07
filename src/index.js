@@ -58,7 +58,8 @@ client.on("messageCreate", async(message) => {
     }
 
     let manga = message.content.match(/\<(.*?)\>/g);
-    if (manga && message.content.match(/\<(.*?)\d{4,}\>/g) == null) {
+    if (manga &&
+        message.content.match(/\<(.*?)\d{4,}\>/g) == null) {
         let name = manga[0].replace(/[<>]/g, "");
         const command = message.client.commands.get("km");
         command.fetchManga(message, name, message.content.match(/\<\<(.*?)\>\>/g) != null);
@@ -70,6 +71,15 @@ client.on("messageCreate", async(message) => {
         let name = ln[0].replace(/[\[\]]/g, "");
         const command = message.client.commands.get("kl");
         command.fetchLightNovel(message, name, message.content.match(/\]\](.*?)\[\[/g) != null);
+        return;
+    }
+
+    //EXPERIMENTAL
+    let manga_e = message.content.match(/\>(.*?)\>/g);
+    if (manga_e && message.content.match(/\>(.*?)\d{4,}\>/g) == null) {
+        let name = manga_e[0].replace(/[<>]/g, "");
+        const command = message.client.commands.get("km");
+        command.fetchMangaExperimental(message, name, message.content.match(/\>\>(.*?)\>\>/g) != null);
         return;
     }
 });
