@@ -38,7 +38,6 @@ client.on("interactionCreate", async (interaction) => {
 
     if (interaction.customId === "select_manga") {
         let selection = JSON.parse(interaction.values[0]);
-        console.log(selection);
         if(interaction.member.id != selection[2]) return;
         await interaction.update({ content: `Fetching...`, components: [] });
         let mangaCMD = interaction.client.commands.get('km');
