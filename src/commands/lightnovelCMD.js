@@ -29,7 +29,9 @@ export default {
         if (mu_url) mu_url = mu_url.mu_url;
 
         if (!data) {
-            interaction.reply("Could not find anything.");
+            interaction.reply("Could not find anything.").then((msg) => {
+                setTimeout(() => msg.delete(), 3000);
+            });
             return;
         }
 

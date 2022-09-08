@@ -27,7 +27,9 @@ export default {
         if(mu_url) mu_url = mu_url.mu_url;
 
         if (!data) {
-            interaction.reply("Could not find anything.");
+            interaction.reply("Could not find anything.").then((msg) => {
+                setTimeout(() => msg.delete(), 3000);
+            });
             return;
         }
 
@@ -41,7 +43,9 @@ export default {
         let data = await MUApi.search(search_query);
         // Not found
         if (!data) {
-            interaction.reply("Could not find anything.");
+            interaction.reply("Could not find anything.").then((msg) => {
+                setTimeout(() => msg.delete(), 3000);
+            });
             return;
         }
 
@@ -56,7 +60,7 @@ export default {
         });
 
         const row = new ActionRowBuilder().addComponents(smb);
-        await interaction.reply({ content: "Which Series are you looking for?", components: [row] });
+        await interaction.reply({ content: "Which Series are you looking for?", components: [row], ephemeral: true });
     },
     async loadManga(interaction, series_id, detailed = false) {
         interaction.channel.sendTyping();
