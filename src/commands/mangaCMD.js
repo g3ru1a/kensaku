@@ -27,7 +27,7 @@ export default {
         if(mu_url) mu_url = mu_url.mu_url;
 
         if (!data) {
-            interaction.reply("Could not find anything.").then((msg) => {
+            interaction.reply({ content: "Could not find anything.", ephemeral: true}).then((msg) => {
                 setTimeout(() => msg.delete(), 3000);
             });
             return;
@@ -37,84 +37,5 @@ export default {
         let embed = MangaEmbed.build(data, detailed);
         if(cmd) await interaction.reply({ embeds: [embed] });
         else await interaction.channel.send({ embeds: [embed] });
-    },
-    async fetchMangaExperimental(interaction, search_query, detailed = false) {
-        interaction.channel.sendTyping();
-        let data = await MUApi.search(search_query);
-        // Not found
-        if (!data) {
-            interaction.reply("Could not find anything.").then((msg) => {
-                setTimeout(() => msg.delete(), 3000);
-            });
-            return;
-        }
-
-        // Found Multiple
-        let smb = new SelectMenuBuilder().setCustomId("select_manga").setPlaceholder("Nothing selected");
-
-        data.forEach((e) => {
-            smb.addOptions({
-                label: e.name,
-                value: JSON.stringify([e.id, detailed, interaction.member.id]),
-            });
-        });
-
-        const row = new ActionRowBuilder().addComponents(smb);
-        await interaction.reply({ content: "Which Series are you looking for?", components: [row], ephemeral: true });
-    },
-    async loadManga(interaction, series_id, detailed = false) {
-        interaction.channel.sendTyping();
-        let mu = await MUApi.getSeries(series_id);
-        if(!mu) return;
-
-        let [al, md] = await Promise.allSettled([ALApi.search(mu.title.romaji), MDApi.search(mu.title.romaji)]);
-        
-        let data = {...mu};
-        if(al) {
-            al = al.value;
-            if(al){
-                let keys = Object.keys(data).filter(
-                    (key) => data[key] == "" || data[key] == undefined || data[key] == null
-                );
-                keys.forEach((key) => {
-                    if (al[key]) data[key] = al[key];
-                });
-                if (al.status && al.status.length < data.status.length) data.status = al.status.toUpperCase();
-                if (al.author && al.author.length > data.author.length) data.author = al.author;
-                if (data.title.romaji == null && al.title?.romaji) {
-                    data.title.romaji = al.title.romaji;
-                }
-                if (data.title.native == null && al.title?.native) {
-                    data.title.native = al.title.native;
-                }
-                if (data.title.english == null && al.title?.english) {
-                    data.title.english = al.title.english;
-                }
-            }
-        }
-        if(md) {
-            md = md.value;
-            if(md) {
-                let keys = Object.keys(data).filter(
-                    (key) => data[key] == "" || data[key] == undefined || data[key] == null
-                );
-                keys.forEach((key) => {
-                    if (md[key]) data[key] = md[key];
-                });
-                if (md.status && md.status.length < data.status.length) data.status = md.status.toUpperCase();
-                if (md.author && md.author.length > data.author.length) data.author = md.author;
-                if (data.title.romaji == null && md.title?.romaji) {
-                    data.title.romaji = md.title.romaji;
-                }
-                if (data.title.native == null && md.title?.native) {
-                    data.title.native = md.title.native;
-                }
-                if (data.title.english == null && md.title?.english) {
-                    data.title.english = md.title.english;
-                }
-            }
-        }
-        let embed = MangaEmbed.build(data, detailed);
-        await interaction.channel.send({ embeds: [embed] });
     },
 };

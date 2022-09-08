@@ -1,0 +1,8 @@
+Error while searching AniList for 'askdjasd'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+
+Error while searching AniList for 'askdjasd'. HTTP Response:
+ "{"errors":[{"message":"Not Found.","status":404,"locations":[{"line":3,"column":5}]}],"data":{"Media":null}}"
+
+

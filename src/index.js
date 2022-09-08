@@ -40,7 +40,7 @@ client.on("interactionCreate", async (interaction) => {
         let selection = JSON.parse(interaction.values[0]);
         if(interaction.member.id != selection[2]) return;
         await interaction.update({ content: `Fetching...`, components: [] });
-        let mangaCMD = interaction.client.commands.get('km');
+        let mangaCMD = interaction.client.commands.get('kme');
         mangaCMD.loadManga(interaction, selection[0], selection[1]);
     }
 });
@@ -77,7 +77,7 @@ client.on("messageCreate", async(message) => {
     let manga_e = message.content.match(/\>(.*?)\>/g);
     if (manga_e && message.content.match(/\>(.*?)\d{4,}\>/g) == null) {
         let name = manga_e[0].replace(/[<>]/g, "");
-        const command = message.client.commands.get("km");
+        const command = message.client.commands.get("kme");
         command.fetchMangaExperimental(message, name, message.content.match(/\>\>(.*?)\>\>/g) != null);
         return;
     }
