@@ -25,3 +25,13 @@ Lookup Manga, Anime & Light Novel information with ease right in your discord se
 ### Invite Bot to Your Server
 
 [Discord Invite Link](https://discord.com/api/oauth2/authorize?client_id=1016677293789298729&permissions=414464698432&scope=bot%20applications.commands)
+
+## Credits
+
+This bot relies on the following APIs:
+
+[MangaUpdates API](https://api.mangaupdates.com/)
+
+[Anilist API](https://anilist.gitbook.io/anilist-apiv2-docs/)
+
+[MangaDex API](https://api.mangadex.org/docs/)
