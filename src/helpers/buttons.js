@@ -24,7 +24,7 @@ export const Buttons = {
                     setTimeout(() => interaction.deleteReply(), 5000);
                 }
             } else {
-                interaction.reply({ content: `These buttons aren't for you!`, ephemeral: true });
+                interaction.reply({ content: `Looks like you can't use this button!`, ephemeral: true });
                 
             }
         }
