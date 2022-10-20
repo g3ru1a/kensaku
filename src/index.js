@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
 import { Client, GatewayIntentBits, ActivityType } from "discord.js";
 import CH from "./helpers/commands.js";
+import {Buttons} from "./helpers/buttons.js";
+import {ThreadFollow } from "./helpers/threadFollow.js";
 //Load .env
 dotenv.config();
+ThreadFollow.boot();
 
 const token = process.env.BOT_TOKEN;
 
@@ -38,12 +41,17 @@ client.on("interactionCreate", async (interaction) => {
 
     if (interaction.customId === "select_manga") {
         let selection = JSON.parse(interaction.values[0]);
-        if(interaction.member.id != selection[2]) return;
+        if(interaction.member.id != selection[2]) {
+            interaction.reply({ content: `You can't use this selection box!`, ephemeral: true });
+            return;
+        }
         await interaction.update({ content: `Fetching...`, components: [] });
         let mangaCMD = interaction.client.commands.get('kme');
         mangaCMD.loadManga(interaction, selection[0], selection[1]);
     }
 });
+
+client.on("interactionCreate", async (interaction) => Buttons.handle(interaction));
 
 client.on("messageCreate", async(message) => {
     if (message.author.bot) return;

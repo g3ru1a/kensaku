@@ -1,7 +1,9 @@
 import { SlashCommandBuilder } from "discord.js";
 import LNEmbed from "../embeds/lightnovel.js";
 import AnilistAPI from "../helpers/anilist.js";
+import { Buttons } from "../helpers/buttons.js";
 import MangaUpdatesAPI from "../helpers/mangaupdates.js";
+import { ThreadFollow } from "../helpers/threadFollow.js";
 
 const ALApi = new AnilistAPI(AnilistAPI.Types.MANGA, AnilistAPI.Sorts.POPULARITY_DESC,
     false, AnilistAPI.Formats.NOVEL);
@@ -37,7 +39,13 @@ export default {
 
         data.mu_url = mu_url;
         let embed = LNEmbed.build(data, detailed);
-        if (cmd) await interaction.reply({ embeds: [embed] });
-        else await interaction.channel.send({ embeds: [embed] });
+
+        let comp = interaction.channel.isThread()
+            ? Buttons.threadComponents(interaction.member.id)
+            : Buttons.components(interaction.member.id);
+
+        if (cmd) await interaction.reply({ embeds: [embed], components: [comp] });
+        else await interaction.channel.send({ embeds: [embed], components: [comp] });
+        if (interaction.channel.isThread()) ThreadFollow.pushToFollowers(interaction, embed);
     },
 };
