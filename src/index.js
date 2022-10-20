@@ -5,7 +5,7 @@ import {Buttons} from "./helpers/buttons.js";
 import {ThreadFollow } from "./helpers/threadFollow.js";
 //Load .env
 dotenv.config();
-ThreadFollow.boot();
+await ThreadFollow.boot();
 
 const token = process.env.BOT_TOKEN;
 

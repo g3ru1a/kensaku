@@ -1,68 +1,55 @@
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { Buttons } from "./buttons.js";
-
-let data = {};
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const filePath = "../../follower.json";
-const realPath = path.join(__dirname, filePath);
+import mongoose from "mongoose";
+import {Channel} from "./DB/channel.js";
+import {Member} from "./DB/member.js";
+import {ChannelMember} from "./DB/channel_member.js";
 
 export const ThreadFollow = {
-    boot: () => {
-        if (!fs.existsSync(realPath)) {
-            fs.writeFileSync(realPath, JSON.stringify({ channels: [] }));
-        }
-        let buf = fs.readFileSync(realPath);
-        data = JSON.parse(buf.toString());
-        console.log("[ThreadFollowing] Loaded Followers File.");
+    boot: async () => {
+        return mongoose
+            .connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+            .then(() => console.log("[ThreadFollowing] Connected to DB."))
+            .catch((err) => console.log(err));
     },
-    toggleFollow: (member_id, channel) => {
-        let channel_id = channel.id;
+    toggleFollow: async (member_id, channel, guild) => {
         let onList = true;
-        //If theres already members in the channel follow list
-        if(data.channels.find(c => c.id === channel_id)){
-            //check if the member is already following, if so, remove them from the list
-            if (data.channels.find((c) => c.id === channel_id).members.find((m) => m === member_id)){
-                data.channels.find((c) => c.id === channel_id).members = data.channels
-                    .find((c) => c.id === channel_id)
-                    .members.filter((m) => m !== member_id);    
-                onList = false;
-            //if not then add them
-            }else {
-                data.channels.find((c) => c.id === channel_id).members.push(member_id);
-            }
-        // If nobody followes the channel, initialize it with the member
-        }else{
-            data.channels = [
-                ...data.channels,
-                {
-                    id: channel_id,
-                    name: channel.name,
-                    members: [member_id]
-                }
-            ];
+        //If channel or member are not registered, register them in DB
+        let member = await Member.findOne({discord_id: member_id}).exec();
+        if (member === null) {
+            member = await new Member({ discord_id: member_id, guild_id: guild.id}).save();
         }
-        //Save data
-        let toBeWritten = JSON.stringify(data);
-        fs.writeFileSync(realPath, toBeWritten);
+        let ch = await Channel.findOne({ discord_id: channel.id }).exec();
+        if (ch === null) {
+            ch = await new Channel({ discord_id: channel.id, discord_name: channel.name }).save();
+        }
+
+        let cm = await ChannelMember.findOne({channel: ch, member: member}).exec();
+        if(cm === null){
+            await new ChannelMember({channel: ch, member: member}).save();
+        }else{
+            await ChannelMember.findByIdAndRemove(cm);
+            onList = false;
+        }
         let logData = onList ? 'started':'stopped'
         console.log(`[ThreadFollowing] User(${member_id}) ${logData} following #${channel.name}(${channel.id}).`);
         return onList;
     },
-    pushToFollowers: (interaction, embed) => {
+    pushToFollowers: async (interaction, embed) => {
         let channel_id = interaction.channel.id;
-        if(!data.channels.find(c => c.id === channel_id)) return;
-
-        let members = data.channels.find(c => c.id === channel_id).members;
-        members.forEach(member => {
+        let ch = await Channel.findOne({ discord_id: channel_id }).exec();
+        if (ch === null) return;
+        let cm = await ChannelMember.find({ channel: ch }).populate("member");
+        let members = cm.map(channel => channel.member);
+        members.forEach(async member => {
             // if(member === interaction.member.id) return;
-            interaction.client.users.cache.get(member).send({
+            let guild = await interaction.client.guilds.fetch(member.guild_id);
+            if(!guild) return console.log(`[ThreadFollowing] Could not find Guild(${member.guild_id}) in Client`);
+            let user = await guild.members.fetch(member.discord_id);
+            if (!user) return console.log(`[ThreadFollowing] Could not find User(${member.discord_id}) in Guild(${guild.id})`);
+            user.send({
                 content: `> Recommendation from <#${interaction.channel.id}>\n > Sent by <@${interaction.member.id}> \n\n *To unfollow a thread go to said thread and click the 'Follow/Unfollow Thread' button on any of the bot messages.*`,
                 embeds: [embed],
-                components: [Buttons.dmComponents(member)],
+                components: [Buttons.dmComponents(member.discord_id)],
             });
         });
         console.log("[ThreadFollowing] Sent to " + members.length + " users.");

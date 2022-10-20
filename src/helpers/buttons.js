@@ -33,7 +33,7 @@ export const Buttons = {
             interaction.deferUpdate();
         }
         if (buttonData[0] === "toggle") {
-            let following = ThreadFollow.toggleFollow(buttonData[1], interaction.channel);
+            let following = await ThreadFollow.toggleFollow(interaction.member.id, interaction.channel, interaction.guild);
             let status = following ? "are now" : "are no longer"
             interaction.reply({ content: `You ${status} following ${interaction.channel.name}.`, ephemeral: true});
         }
