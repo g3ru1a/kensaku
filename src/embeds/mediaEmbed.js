@@ -27,7 +27,7 @@ export default {
             )
 
             .setTimestamp()
-            .setFooter({ text: "<manga> ]ln[ {anime} | G3ru1a#1337 for bug reports" });
+            .setFooter({ text: "<manga> ]ln[ {anime} | /ksupport for bug reports" });
         if (data.author) {
             embed.setAuthor({ name: `Written By ${data.author}` });
         }
